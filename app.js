@@ -5,6 +5,7 @@ var bodyParser=require('body-parser');
 
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
 app.set('view engine','ejs');
 
 var mongoose=require('mongoose');
@@ -35,27 +36,28 @@ app.get('/h',(req,res)=>{
     res.render('indexLogin')
 });
 app.post('/login',(req,res)=> {
-    var name=req.body.name;
-    var password=req.body.password;
-    Model.findOne({name:name,password:password},(err,user)=>{
-        if(err){
-            console.log(err);
-            return res.status(500).send();
-        }
-        if(user===null) {
-            res.render('failedLogin')
-        }else{
+   Model.findOne({password:req.body.p},(err,user)=>{
+       if(err){
+           console.log(err);
+           return res.status(500).send();
+       }
+       if(user===null){
+           res.render('failedLogin')
+       }else {
            res.render('app2');
-        }
+       }
+   })
 
-    })
 });
-/*app.get('/home2',(req,res)=>{
+/*app.get('/invalid',(req,res)=>{
+    res.render('failedLogin');
+});
+app.get('/valid',(req,res)=>{
     res.render('app2');
 });*/
 
 
 
-app.listen(7223,()=>{
+app.listen(1998,()=>{
     console.log('done');
 });
